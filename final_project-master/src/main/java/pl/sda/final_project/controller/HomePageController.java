@@ -4,6 +4,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 import pl.sda.final_project.service.UserService;
+import pl.sda.final_project.service.WeatherService;
 
 @Controller
 
