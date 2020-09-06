@@ -1,9 +1,11 @@
 package pl.sda.final_project.service;
 
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import pl.sda.final_project.dto.RegistrationDto;
-import pl.sda.final_project.model.user.User;
+import pl.sda.final_project.dto.UserDto;
 import pl.sda.final_project.model.user.UserEntity;
 import pl.sda.final_project.model.user.UserRole;
 import pl.sda.final_project.repo.UserRepo;
@@ -15,6 +17,7 @@ public class UserService {
     private final UserRepo userRepo;
     private final UserRoleRepo userRoleRepo;
     private final PasswordEncoder passwordEncoder;
+
 
     public UserService(UserRepo userRepo, UserRoleRepo userRoleRepo, PasswordEncoder passwordEncoder) {
         this.userRepo = userRepo;
@@ -38,5 +41,13 @@ public class UserService {
         return userRepo.existsByLogin(login);
     }
 
+    public UserDto getCurrentUser() {
+        String userName = SecurityContextHolder.getContext().getAuthentication().getName();
+        return userRepo.findByLogin(userName)
+                .map(UserDto::apply)
+                .orElseThrow(() -> new RuntimeException("Cant find user"));
+
+
+    }
 
 }

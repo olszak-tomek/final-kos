@@ -30,7 +30,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {//konfiguracja zabezpieczeń
         http.authorizeRequests()
-                .antMatchers("/register", "/register/*", "/")// /register/something   -> wpusci; /register/something/somtehing   ->nie wpusci
+                .antMatchers("/register", "/register/*", "/","/rest/*")// /register/something   -> wpusci; /register/something/somtehing   ->nie wpusci
                 .permitAll()
                 .antMatchers("/login")
                 .permitAll()
@@ -58,9 +58,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .password(passwordEncoder.encode("admin"))
                 .roles("ADMIN");
         auth.jdbcAuthentication()
-                .usersByUsernameQuery("select u.LOGIN, u.PASSWORD, 1 from USER u  where u.LOGIN = ?")
-                .authoritiesByUsernameQuery("select u.LOGIN, R.ROLE_NAME, 1 from USER u \n" +
-                        "join USER_ROLES UR on u.ID = UR.USER_ID\n" +
+                .usersByUsernameQuery("select u.LOGIN, u.PASSWORD, 1 from USER_ENTITY u  where u.LOGIN = ?")
+                .authoritiesByUsernameQuery("select u.LOGIN, R.ROLE_NAME, 1 from USER_ENTITY u \n" +
+                        "join USER_ENTITY_ROLES UR on u.ID = UR.USER_ENTITY_ID\n" +
                         "join USER_ROLE R on R.ID = UR.ROLES_ID\n" +
                         "where u.LOGIN = ?\n")
                 .dataSource(dataSource)  //podajemy, gdzie jest źródło danych (baza danych)
